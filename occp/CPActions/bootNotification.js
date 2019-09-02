@@ -1,30 +1,27 @@
-const {generateOCPPAnswer} = require('../../utils/wssUtils');
-const {statusCodes, messageTypes} = require('../../constants/occpConstants');
+const {generateOCPPAnswer, checkTypes} = require('../../utils/wssUtils');
+const {statusCodes, messageTypes, errorCodes} = require('../../constants/occpConstants');
 
-const bootNotification = ({ messageType, uniqueId, action, payload }) => {
-    const error = {
-        state: false,
-        description: '',
-        details: {},
-        code: '',
+const bootNotification = ({messageType, uniqueId, action, payload}) => {
+    const payloadPropsTypes = {
+        chargeBoxSerialNumber: ['string', 25],
+        chargePointModel: ['string', 20, true],
+        chargePointSerialNumber: ['string', 25],
+        chargePointVendor: ['string', 20, true],
+        firmwareVersion: ['string', 50],
+        iccid: ['string', 20],
+        imsi: ['string', 20],
+        meterSerialNumber: ['string', 25],
+        meterType: ['string', 25],
     };
-    const {
-        chargeBoxSerialNumber, //25
-        chargePointModel, //required 20
-        chargePointSerialNumber, //25
-        chargePointVendor, //required 20
-        firmwareVersion, //50
-        iccid, //20
-        imsi, //20
-        meterSerialNumber, //25
-        meterType, //25
-    } = payload;
 
-    console.log(chargePointModel.length);
-
-    if (isNaN(Number(uniqueId))){
-        error.state = true;
-        error.description += ''
+    const error = checkTypes(payload, payloadPropsTypes);
+    if (error) {
+        return generateOCPPAnswer([
+            messageTypes.callError,
+            uniqueId,
+            errorCodes.protocolError,
+            'Protocol error',
+            error]);
     }
 
     const payloadToSend = {
@@ -33,9 +30,8 @@ const bootNotification = ({ messageType, uniqueId, action, payload }) => {
         status: statusCodes.accepted,
     };
 
-    return generateOCPPAnswer([messageTypes.callResult, uniqueId, payloadToSend])
-
     //currentTime, Interval, Status
+    return generateOCPPAnswer([messageTypes.callResult, uniqueId, payloadToSend])
 };
 
 

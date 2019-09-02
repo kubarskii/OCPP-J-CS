@@ -1,5 +1,5 @@
 const errorCodes = {
-    notImplemented : 'NotImplemented',
+    notImplemented: 'NotImplemented',
     notSupported: 'NotSupported',
     internalError: 'InternalError',
     protocolError: 'ProtocolError',
@@ -23,8 +23,24 @@ const statusCodes = {
     rejected: 'Rejected',
 };
 
+const authorizationStatuses = {
+    accepted: 'Accepted',
+    blocked: 'Blocked',
+    expired: 'Expired',
+    invalid: 'Invalid',
+    concurrentTx: 'ConcurrentTx'
+};
+
+const availabilityStatuses = {
+    accepted: 'Accepted',
+    rejected: 'Rejected',
+    scheduled: 'Scheduled',
+};
+
 module.exports = {
-  errorCodes,
-  messageTypes,
-  statusCodes,
+    errorCodes,
+    messageTypes,
+    statusCodes,
+    authorizationStatuses,
+    availabilityStatuses,
 };

@@ -1,5 +1,5 @@
 module.exports = {
-    dbName: 'OCCP',
+    dbName: 'OCPP',
     userName: 'root',
     password: 'root',
     dbDir: {
